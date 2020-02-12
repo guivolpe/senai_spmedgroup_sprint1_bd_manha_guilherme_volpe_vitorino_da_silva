@@ -1,0 +1,69 @@
+CREATE DATABASE SpMedGroup_01_DDL;
+GO
+
+USE SpMedGroup_01_DDL;
+GO
+
+-- Criação das tabelas
+
+
+CREATE TABLE TipoUsuario (
+	IdTipoUsuario INT PRIMARY KEY IDENTITY,
+	TipoUsuario VARCHAR (255) NOT NULL UNIQUE
+);
+GO
+
+CREATE TABLE Usuario (
+	IdUsuario INT PRIMARY KEY IDENTITY,
+	Email VARCHAR (255) NOT NULL UNIQUE,
+	Senha VARCHAR (255) NOT NULL,
+	IdTipousuario INT FOREIGN KEY REFERENCES TipoUsuario (IdTipoUsuario)
+);
+GO
+
+CREATE TABLE Medico (
+	IdMedico INT PRIMARY KEY IDENTITY,
+	CRM VARCHAR (8) NOT NULL UNIQUE,
+	NomeMedico VARCHAR (255) NOT NULL,
+	IdUsuario INT FOREIGN KEY REFERENCES Usuario (IdUsuario),
+	IdEspecialidade INT FOREIGN KEY REFERENCES Especialidade (IdEspecialidade)
+);
+GO
+
+CREATE TABLE Especialidade (
+	IdEspecialidade INT PRIMARY KEY IDENTITY,
+	NomeEspecialidade VARCHAR (255) NOT NULL UNIQUE,
+);
+GO
+
+CREATE TABLE Clinica (
+	IdClinica INT PRIMARY KEY IDENTITY,
+	CNPJ VARCHAR (16) NOT NULL UNIQUE,
+	NomeFantasia VARCHAR (255) NOT NULL,
+	RazaoSocial VARCHAR (255) NOT NULL,
+	EnderecoClinica VARCHAR (255) NOT NULL,
+);
+GO
+
+CREATE TABLE Consulta (
+	IdConsulta INT PRIMARY KEY IDENTITY,
+	DataConsulta DATETIME  NOT NULL,
+	Situacao VARCHAR (255) NOT NULL,
+	IdClinica INT FOREIGN KEY REFERENCES Clinica (IdClinica),
+);
+GO
+
+CREATE TABLE Prontuario (
+	IdProntuario INT PRIMARY KEY IDENTITY,
+	NomeUsuario VARCHAR (255) NOT NULL,
+	Email VARCHAR (255) NOT NULL,
+	Senha VARCHAR (255) NOT NULL,
+	DataNascimento DATETIME NOT NULL,
+	Endereco VARCHAR (255) NOT NULL,
+	Telefone VARCHAR (13),
+	RG VARCHAR (9),
+	CPF VARCHAR (11),
+	IdConsulta INT FOREIGN KEY REFERENCES Consulta (IdConsulta),
+	IdMedico INT FOREIGN KEY REFERENCES Medico (IdMedico),
+	);
+GO
